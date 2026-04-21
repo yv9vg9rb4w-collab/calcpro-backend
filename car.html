@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Canadienne Car — Location de Voitures</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rouge: #C8102E;
+      --rouge-fonce: #9B0B22;
+      --blanc: #F9F5EE;
+      --noir: #0D0D0D;
+      --gris: #2A2A2A;
+      --gris-clair: #E8E4DC;
+      --or: #C9A84C;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--blanc);
+      color: var(--noir);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(13,13,13,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(200,16,46,0.3);
+      animation: slideDown 0.7s ease both;
+    }
+    @keyframes slideDown { from{transform:translateY(-100%);opacity:0} to{transform:translateY(0);opacity:1} }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      text-decoration: none;
+    }
+    .logo-flag {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--rouge);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: 0 0 0 2px var(--or);
+    }
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      color: var(--blanc);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      line-height: 1.1;
+    }
+    .logo-text span { color: var(--rouge); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+    }
+    nav ul a {
+      color: var(--gris-clair);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--or); }
+
+    .nav-cta {
+      background: var(--rouge);
+      color: var(--blanc) !important;
+      padding: 0.55rem 1.4rem;
+      border-radius: 2px;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--rouge-fonce) !important; color: var(--blanc) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: var(--noir);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 10rem 4rem 6rem 6rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(200,16,46,0.15);
+      border: 1px solid rgba(200,16,46,0.4);
+      color: var(--rouge);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: 0.45rem 1rem;
+      border-radius: 100px;
+      width: fit-content;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      font-weight: 900;
+      color: var(--blanc);
+      line-height: 1.0;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s 0.5s ease both;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--rouge);
+    }
+
+    .hero-sub {
+      color: #AAA;
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.7;
+      max-width: 420px;
+      margin-bottom: 3rem;
+      animation: fadeUp 0.8s 0.7s ease both;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      animation: fadeUp 0.8s 0.9s ease both;
+    }
+
+    .btn-primary {
+      background: var(--rouge);
+      color: var(--blanc);
+      padding: 1rem 2.2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--rouge-fonce); transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--blanc);
+      padding: 1rem 2.2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid rgba(249,245,238,0.3);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--or); color: var(--or); }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 4rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      animation: fadeUp 0.8s 1.1s ease both;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--blanc);
+    }
+    .stat-num span { color: var(--rouge); }
+    .stat-label {
+      font-size: 0.75rem;
+      color: #777;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-right::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, var(--noir) 0%, transparent 30%),
+                  linear-gradient(to top, var(--noir) 0%, transparent 40%);
+      z-index: 1;
+    }
+    .hero-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.6;
+      animation: zoomIn 8s ease both;
+    }
+    @keyframes zoomIn { from{transform:scale(1.1)} to{transform:scale(1)} }
+
+    .hero-maple {
+      position: absolute;
+      top: 50%; right: -60px;
+      transform: translateY(-50%);
+      font-size: 28rem;
+      color: rgba(200,16,46,0.04);
+      z-index: 0;
+      pointer-events: none;
+      animation: fadeUp 1s 1s ease both;
+    }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── BOOKING BAR ── */
+    .booking-bar {
+      background: var(--gris);
+      padding: 2.5rem 6rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr) auto;
+      gap: 1.5rem;
+      align-items: end;
+      border-bottom: 3px solid var(--rouge);
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--or);
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+    }
+    .field input, .field select {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--blanc);
+      padding: 0.85rem 1rem;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .field input:focus, .field select:focus { border-color: var(--rouge); }
+    .field select option { background: var(--gris); }
+
+    .booking-bar .btn-primary { padding: 0.9rem 2rem; white-space: nowrap; }
+
+    /* ── FLEET ── */
+    section { padding: 7rem 6rem; }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rouge);
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .section-sub {
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 520px;
+    }
+
+    .fleet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3.5rem;
+    }
+
+    .cars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .car-card {
+      background: var(--blanc);
+      border: 1px solid var(--gris-clair);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      position: relative;
+    }
+    .car-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+    }
+
+
+    .car-gallery {
+      height: 230px;
+      position: relative;
+      overflow: hidden;
+      background: #111;
+    }
+    .gallery-slides { width: 100%; height: 100%; position: relative; }
+    .gslide {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .gslide.active { opacity: 1; }
+    .gallery-dots {
+      position: absolute;
+      bottom: 10px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 6px;
+      z-index: 5;
+    }
+    .gdot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .gdot.active { background: var(--rouge); transform: scale(1.3); }
+    .garrow {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,0.45);
+      color: #fff;
+      border: none;
+      width: 30px; height: 30px;
+      font-size: 1.2rem;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 0.2s, background 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .car-gallery:hover .garrow { opacity: 1; }
+    .garrow:hover { background: var(--rouge); }
+    .garrow-l { left: 8px; }
+    .garrow-r { right: 8px; }
+
+    .car-badge {
+      position: absolute;
+      top: 1rem; left: 1rem;
+      background: var(--rouge);
+      color: var(--blanc);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 0.3rem 0.7rem;
+    }
+
+    .car-overlay { display: none; }
+
+    .car-info { padding: 1.5rem; }
+    .car-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    .car-cat {
+      font-size: 0.75rem;
+      color: #888;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .car-specs {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--gris-clair);
+    }
+    .spec {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      color: #666;
+    }
+    .spec-icon { font-size: 1rem; }
+
+    .car-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .car-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--rouge);
+    }
+    .car-price small {
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.75rem;
+      color: #999;
+      font-weight: 400;
+    }
+    .car-btn {
+      background: var(--noir);
+      color: var(--blanc);
+      border: none;
+      padding: 0.6rem 1.3rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .car-btn:hover { background: var(--rouge); }
+
+    /* ── WHY ── */
+    .why { background: var(--noir); color: var(--blanc); }
+    .why h2 { color: var(--blanc); }
+    .why .section-sub { color: #888; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+    .feature {
+      padding: 2rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .feature:hover {
+      border-color: var(--rouge);
+      background: rgba(200,16,46,0.05);
+    }
+    .feature-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1.2rem;
+    }
+    .feature h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.7rem;
+      color: var(--blanc);
+    }
+    .feature p {
+      font-size: 0.88rem;
+      color: #777;
+      line-height: 1.7;
+    }
+
+    /* ── PROMO BANNER ── */
+    .promo {
+      background: var(--rouge);
+      padding: 4rem 6rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .promo h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 900;
+      color: var(--blanc);
+      margin: 0;
+      max-width: 500px;
+    }
+    .promo h2 em { color: var(--or); }
+    .promo-side {
+      text-align: right;
+    }
+    .promo-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--blanc);
+      line-height: 1;
+    }
+    .promo-price small { font-size: 1rem; }
+    .promo-note {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .promo .btn-outline {
+      border-color: rgba(255,255,255,0.5);
+    }
+    .promo .btn-outline:hover { border-color: var(--blanc); color: var(--blanc); }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials { background: var(--gris-clair); }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+    .review {
+      background: var(--blanc);
+      padding: 2rem;
+      position: relative;
+    }
+    .review::before {
+      content: '"';
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      color: var(--rouge);
+      opacity: 0.15;
+      position: absolute;
+      top: 0.5rem; left: 1.5rem;
+      line-height: 1;
+    }
+    .review-text {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: #444;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+    .review-author {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .review-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--rouge);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blanc);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .review-name { font-weight: 600; font-size: 0.9rem; }
+    .review-city { font-size: 0.75rem; color: #999; }
+    .stars { color: var(--or); font-size: 0.85rem; margin-bottom: 0.3rem; }
+
+    /* ── CONTACT ── */
+    .contact {
+      background: var(--noir);
+      color: var(--blanc);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      padding: 7rem 6rem;
+    }
+    .contact h2 { color: var(--blanc); }
+    .contact .section-sub { color: #777; }
+
+    .contact-infos {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .contact-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .ci-icon {
+      font-size: 1.4rem;
+      width: 44px; height: 44px;
+      background: rgba(200,16,46,0.15);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .ci-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--or);
+      margin-bottom: 0.3rem;
+    }
+    .ci-val { font-size: 0.95rem; color: #CCC; }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .form-field label {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #777;
+      margin-bottom: 0.5rem;
+    }
+    .form-field input, .form-field textarea, .form-field select {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--blanc);
+      padding: 0.9rem 1rem;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+    .form-field input:focus,
+    .form-field textarea:focus { border-color: var(--rouge); }
+    .form-field textarea { height: 120px; }
+    .form-field select option { background: var(--gris); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #080808;
+      padding: 4rem 6rem 2rem;
+      border-top: 1px solid rgba(200,16,46,0.2);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 3rem;
+    }
+    .footer-brand .logo-text {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .footer-brand p {
+      font-size: 0.85rem;
+      color: #666;
+      line-height: 1.7;
+      max-width: 260px;
+    }
+    .footer-col h4 {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--or);
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.6rem; }
+    .footer-col ul a {
+      text-decoration: none;
+      color: #666;
+      font-size: 0.88rem;
+      transition: color 0.2s;
+    }
+    .footer-col ul a:hover { color: var(--blanc); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: #555;
+    }
+    .footer-bottom a { color: #555; text-decoration: none; }
+    .maple-line {
+      color: var(--rouge);
+      letter-spacing: 0.5rem;
+    }
+
+    /* ── SCROLL ANIMATE ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width: 1100px) {
+      nav { padding: 1.2rem 2rem; }
+      nav ul { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 9rem 3rem 4rem; }
+      section { padding: 5rem 2rem; }
+      .booking-bar { grid-template-columns: 1fr 1fr; padding: 2rem; gap: 1rem; }
+      .booking-bar .btn-primary { grid-column: span 2; }
+      .cars-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .contact { grid-template-columns: 1fr; padding: 4rem 2rem; gap: 3rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .promo { flex-direction: column; gap: 2rem; text-align: center; padding: 3rem 2rem; }
+      .promo-side { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-flag">🍁</div>
+    <div class="logo-text">La <span>Canadienne</span><br>Car</div>
+  </a>
+  <ul>
+    <li><a href="#flotte">Notre Flotte</a></li>
+    <li><a href="#pourquoi">Pourquoi Nous</a></li>
+    <li><a href="#avis">Avis Clients</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#contact" class="nav-cta">Réserver</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">🍁 &nbsp; Service Premium · Depuis 2005</div>
+    <h1>Conduisez<br>avec <em>style</em><br>&amp; liberté</h1>
+    <p class="hero-sub">La Canadienne Car vous offre une expérience de location haut de gamme — des véhicules impeccables, des prix transparents, et un service qui va au-delà de vos attentes.</p>
+    <div class="hero-btns">
+      <a href="#reservation" class="btn-primary">Réserver maintenant</a>
+      <a href="#flotte" class="btn-outline">Voir notre flotte</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">500<span>+</span></div>
+        <div class="stat-label">Véhicules</div>
+      </div>
+      <div>
+        <div class="stat-num">15<span>k</span></div>
+        <div class="stat-label">Clients Heureux</div>
+      </div>
+      <div>
+        <div class="stat-num">20<span>+</span></div>
+        <div class="stat-label">Agences</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img class="hero-img" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80" alt="Voiture de luxe" />
+    <div class="hero-maple">🍁</div>
+  </div>
+</section>
+
+<!-- BOOKING BAR -->
+<div id="reservation" class="booking-bar">
+  <div class="field">
+    <label>📍 Lieu de prise en charge</label>
+    <input type="text" placeholder="Ville ou agence..." />
+  </div>
+  <div class="field">
+    <label>📅 Date de départ</label>
+    <input type="date" />
+  </div>
+  <div class="field">
+    <label>📅 Date de retour</label>
+    <input type="date" />
+  </div>
+  <div class="field">
+    <label>🚗 Catégorie</label>
+    <select>
+      <option>Toutes catégories</option>
+      <option>Économique</option>
+      <option>Berline</option>
+      <option>SUV</option>
+      <option>Prestige</option>
+      <option>Utilitaire</option>
+    </select>
+  </div>
+  <button class="btn-primary" onclick="alert('Recherche lancée !')">Rechercher →</button>
+</div>
+
+<!-- FLEET -->
+<section id="flotte">
+  <div class="fleet-header">
+    <div>
+      <div class="section-label reveal">Notre Flotte</div>
+      <h2 class="reveal">Des véhicules pour<br>chaque besoin</h2>
+      <p class="section-sub reveal">Découvrez l'ensemble de notre flotte — des citadines aux véhicules de prestige.</p>
+    </div>
+  </div>
+
+  <div class="cars-grid">
+
+    <!-- Toyota Corolla -->
+    <div class="car-card reveal">
+      <div class="car-gallery" data-index="0">
+        <div class="car-badge">Populaire</div>
+        <div class="gallery-slides">
+          <img class="gslide active" src="https://images.unsplash.com/photo-1623869675781-80aa31012a5a?w=600&q=80" alt="Toyota Corolla" />
+          <img class="gslide" src="https://images.unsplash.com/photo-1548011241-3f1c44d7e6e0?w=600&q=80" alt="Toyota Corolla intérieur" />
+          <img class="gslide" src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600&q=80" alt="Toyota Corolla route" />
+        </div>
+        <div class="gallery-dots">
+          <span class="gdot active" onclick="goSlide(0,0)"></span>
+          <span class="gdot" onclick="goSlide(0,1)"></span>
+          <span class="gdot" onclick="goSlide(0,2)"></span>
+        </div>
+        <button class="garrow garrow-l" onclick="prevSlide(0)">‹</button>
+        <button class="garrow garrow-r" onclick="nextSlide(0)">›</button>
+        <div class="car-overlay"><button onclick="alert('Réservation en cours...')">Réserver ce véhicule</button></div>
+      </div>
+      <div class="car-info">
+        <div class="car-name">Toyota Corolla</div>
+        <div class="car-cat">Berline · Confort</div>
+        <div class="car-specs">
+          <div class="spec"><span class="spec-icon">👥</span>5 places</div>
+          <div class="spec"><span class="spec-icon">❄️</span>Clim auto</div>
+          <div class="spec"><span class="spec-icon">⚙️</span>Auto</div>
+        </div>
+        <div class="car-footer">
+          <div class="car-price">350 MAD <small>/ jour</small></div>
+          <button class="car-btn" onclick="alert('Réservation en cours...')">Réserver</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hyundai Tucson -->
+    <div class="car-card reveal">
+      <div class="car-gallery" data-index="1">
+        <div class="car-badge">Nouveau</div>
+        <div class="gallery-slides">
+          <img class="gslide active" src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=600&q=80" alt="SUV" />
+          <img class="gslide" src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=80" alt="SUV intérieur" />
+          <img class="gslide" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80" alt="SUV route" />
+        </div>
+        <div class="gallery-dots">
+          <span class="gdot active" onclick="goSlide(1,0)"></span>
+          <span class="gdot" onclick="goSlide(1,1)"></span>
+          <span class="gdot" onclick="goSlide(1,2)"></span>
+        </div>
+        <button class="garrow garrow-l" onclick="prevSlide(1)">‹</button>
+        <button class="garrow garrow-r" onclick="nextSlide(1)">›</button>
+        <div class="car-overlay"><button onclick="alert('Réservation en cours...')">Réserver ce véhicule</button></div>
+      </div>
+      <div class="car-info">
+        <div class="car-name">Hyundai Tucson</div>
+        <div class="car-cat">SUV · Familial</div>
+        <div class="car-specs">
+          <div class="spec"><span class="spec-icon">👥</span>5 places</div>
+          <div class="spec"><span class="spec-icon">🧳</span>Grand coffre</div>
+          <div class="spec"><span class="spec-icon">⚙️</span>Auto</div>
+        </div>
+        <div class="car-footer">
+          <div class="car-price">550 MAD <small>/ jour</small></div>
+          <button class="car-btn" onclick="alert('Réservation en cours...')">Réserver</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mercedes Classe C -->
+    <div class="car-card reveal">
+      <div class="car-gallery" data-index="2">
+        <div class="car-badge">Premium</div>
+        <div class="gallery-slides">
+          <img class="gslide active" src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=600&q=80" alt="Mercedes" />
+          <img class="gslide" src="https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?w=600&q=80" alt="Mercedes intérieur" />
+          <img class="gslide" src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=600&q=80" alt="Mercedes route" />
+        </div>
+        <div class="gallery-dots">
+          <span class="gdot active" onclick="goSlide(2,0)"></span>
+          <span class="gdot" onclick="goSlide(2,1)"></span>
+          <span class="gdot" onclick="goSlide(2,2)"></span>
+        </div>
+        <button class="garrow garrow-l" onclick="prevSlide(2)">‹</button>
+        <button class="garrow garrow-r" onclick="nextSlide(2)">›</button>
+        <div class="car-overlay"><button onclick="alert('Réservation en cours...')">Réserver ce véhicule</button></div>
+      </div>
+      <div class="car-info">
+        <div class="car-name">Mercedes Classe C</div>
+        <div class="car-cat">Berline · Prestige</div>
+        <div class="car-specs">
+          <div class="spec"><span class="spec-icon">👥</span>5 places</div>
+          <div class="spec"><span class="spec-icon">🎵</span>Audio premium</div>
+          <div class="spec"><span class="spec-icon">⚙️</span>Auto</div>
+        </div>
+        <div class="car-footer">
+          <div class="car-price">950 MAD <small>/ jour</small></div>
+          <button class="car-btn" onclick="alert('Réservation en cours...')">Réserver</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dacia Sandero -->
+    <div class="car-card reveal">
+      <div class="car-gallery" data-index="3">
+        <div class="car-badge">Accessible</div>
+        <div class="gallery-slides">
+          <img class="gslide active" src="https://images.unsplash.com/photo-1541348263662-e068662d82af?w=600&q=80" alt="Citadine" />
+          <img class="gslide" src="https://images.unsplash.com/photo-1502161254066-6c74afbf07aa?w=600&q=80" alt="Citadine intérieur" />
+          <img class="gslide" src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600&q=80" alt="Citadine ville" />
+        </div>
+        <div class="gallery-dots">
+          <span class="gdot active" onclick="goSlide(3,0)"></span>
+          <span class="gdot" onclick="goSlide(3,1)"></span>
+          <span class="gdot" onclick="goSlide(3,2)"></span>
+        </div>
+        <button class="garrow garrow-l" onclick="prevSlide(3)">‹</button>
+        <button class="garrow garrow-r" onclick="nextSlide(3)">›</button>
+        <div class="car-overlay"><button onclick="alert('Réservation en cours...')">Réserver ce véhicule</button></div>
+      </div>
+      <div class="car-info">
+        <div class="car-name">Dacia Sandero</div>
+        <div class="car-cat">Citadine · Économique</div>
+        <div class="car-specs">
+          <div class="spec"><span class="spec-icon">👥</span>5 places</div>
+          <div class="spec"><span class="spec-icon">⛽</span>Essence</div>
+          <div class="spec"><span class="spec-icon">⚙️</span>Manuel</div>
+        </div>
+        <div class="car-footer">
+          <div class="car-price">250 MAD <small>/ jour</small></div>
+          <button class="car-btn" onclick="alert('Réservation en cours...')">Réserver</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VW Caddy -->
+    <div class="car-card reveal">
+      <div class="car-gallery" data-index="4">
+        <div class="car-badge">Famille</div>
+        <div class="gallery-slides">
+          <img class="gslide active" src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&q=80" alt="Monospace" />
+          <img class="gslide" src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600&q=80" alt="Monospace intérieur" />
+          <img class="gslide" src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=600&q=80" alt="Monospace route" />
+        </div>
+        <div class="gallery-dots">
+          <span class="gdot active" onclick="goSlide(4,0)"></span>
+          <span class="gdot" onclick="goSlide(4,1)"></span>
+          <span class="gdot" onclick="goSlide(4,2)"></span>
+        </div>
+        <button class="garrow garrow-l" onclick="prevSlide(4)">‹</button>
+        <button class="garrow garrow-r" onclick="nextSlide(4)">›</button>
+        <div class="car-overlay"><button onclick="alert('Réservation en cours...')">Réserver ce véhicule</button></div>
+      </div>
+      <div class="car-info">
+        <div class="car-name">Volkswagen Caddy</div>
+        <div class="car-cat">Monospace · Utilitaire</div>
+        <div class="car-specs">
+          <div class="spec"><span class="spec-icon">👥</span>7 places</div>
+          <div class="spec"><span class="spec-icon">🧳</span>Grand coffre</div>
+          <div class="spec"><span class="spec-icon">⚙️</span>Auto</div>
+        </div>
+        <div class="car-footer">
+          <div class="car-price">Prix non spécifié <small>/ jour</small></div>
+          <button class="car-btn" onclick="alert('Réservation en cours...')">Réserver</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BMW X5 -->
+    <div class="car-card reveal">
+      <div class="car-gallery" data-index="5">
+        <div class="car-badge">Luxe</div>
+        <div class="gallery-slides">
+          <img class="gslide active" src="https://ibb.co/7dntG415][img]https://i.ibb.co/7dntG415/IMG-7963.jpg[/img]" alt="BMW X5" />
+          <img class="gslide" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80" alt="BMW X5 intérieur" />
+          <img class="gslide" src="https://images.unsplash.com/photo-1520031441872-265e4ff70366?w=600&q=80" alt="BMW X5 route" />
+        </div>
+        <div class="gallery-dots">
+          <span class="gdot active" onclick="goSlide(5,0)"></span>
+          <span class="gdot" onclick="goSlide(5,1)"></span>
+          <span class="gdot" onclick="goSlide(5,2)"></span>
+        </div>
+        <button class="garrow garrow-l" onclick="prevSlide(5)">‹</button>
+        <button class="garrow garrow-r" onclick="nextSlide(5)">›</button>
+        <div class="car-overlay"><button onclick="alert('Réservation en cours...')">Réserver ce véhicule</button></div>
+      </div>
+      <div class="car-info">
+        <div class="car-name">BMW X5</div>
+        <div class="car-cat">SUV · Prestige</div>
+        <div class="car-specs">
+          <div class="spec"><span class="spec-icon">👥</span>5 places</div>
+          <div class="spec"><span class="spec-icon">🏔️</span>4×4</div>
+          <div class="spec"><span class="spec-icon">⚙️</span>Auto</div>
+        </div>
+        <div class="car-footer">
+          <div class="car-price">Prix non spécifié <small>/ jour</small></div>
+          <button class="car-btn" onclick="alert('Réservation en cours...')">Réserver</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="pourquoi" class="why">
+  <div class="section-label reveal">Pourquoi Nous Choisir</div>
+  <h2 class="reveal">L'excellence canadienne<br>à votre service</h2>
+  <p class="section-sub reveal">Depuis plus de 20 ans, La Canadienne Car s'engage à offrir un service irréprochable à chaque client.</p>
+
+  <div class="features-grid">
+    <div class="feature reveal">
+      <div class="feature-icon">🛡️</div>
+      <h3>Assurance Complète</h3>
+      <p>Tous nos véhicules sont couverts par une assurance tous risques. Roulez l'esprit tranquille.</p>
+    </div>
+    <div class="feature reveal">
+      <div class="feature-icon">🕐</div>
+      <h3>Disponible 24h/24</h3>
+      <p>Notre équipe est disponible à toute heure pour vous assister en cas d'urgence ou de panne.</p>
+    </div>
+    <div class="feature reveal">
+      <div class="feature-icon">✅</div>
+      <h3>Véhicules Révisés</h3>
+      <p>Chaque voiture passe un contrôle technique rigoureux avant chaque location.</p>
+    </div>
+    <div class="feature reveal">
+      <div class="feature-icon">💳</div>
+      <h3>Paiement Flexible</h3>
+      <p>Carte bancaire, virement ou espèces — nous acceptons tous les modes de paiement.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROMO -->
+<div class="promo">
+  <h2>Louez pour <em>7 jours</em>,<br>payez seulement 5 !</h2>
+  <div class="promo-side">
+    <div class="promo-note">Offre limitée · Économique</div>
+    <div class="promo-price"><small>À partir de</small><br>250 MAD<small>/j</small></div>
+    <br>
+    <a href="#reservation" class="btn-outline">Profiter de l'offre →</a>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section id="avis" class="testimonials">
+  <div class="section-label reveal">Avis Clients</div>
+  <h2 class="reveal">Ce que disent<br>nos clients</h2>
+
+  <div class="reviews-grid">
+    <div class="review reveal">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">Service impeccable ! La voiture était propre, le personnel très professionnel. Je recommande La Canadienne Car sans hésitation.</p>
+      <div class="review-author">
+        <div class="review-avatar">KA</div>
+        <div>
+          <div class="review-name">Karim Alaoui</div>
+          <div class="review-city">Casablanca</div>
+        </div>
+      </div>
+    </div>
+    <div class="review reveal">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">Meilleur rapport qualité-prix que j'ai trouvé au Maroc. La voiture était excellente et le check-in rapide. Merci !</p>
+      <div class="review-author">
+        <div class="review-avatar">SB</div>
+        <div>
+          <div class="review-name">Sofia Benchaâbane</div>
+          <div class="review-city">Rabat</div>
+        </div>
+      </div>
+    </div>
+    <div class="review reveal">
+      <div class="stars">★★★★☆</div>
+      <p class="review-text">Très bonne expérience globale. Le BMW X5 était en parfait état. Je reviendrai certainement pour ma prochaine visite.</p>
+      <div class="review-author">
+        <div class="review-avatar">YM</div>
+        <div>
+          <div class="review-name">Youssef Mansouri</div>
+          <div class="review-city">Marrakech</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div id="contact" class="contact">
+  <div>
+    <div class="section-label">Contactez-Nous</div>
+    <h2>Parlons de<br>votre projet</h2>
+    <p class="section-sub">Une question ? Besoin d'un devis pour un long séjour ou un groupe ? Notre équipe vous répond rapidement.</p>
+    <div class="contact-infos">
+      <div class="contact-info">
+        <div class="ci-icon">📍</div>
+        <div>
+          <div class="ci-label">Siège Social</div>
+          <div class="ci-val">123 Boulevard Mohammed V, Casablanca</div>
+        </div>
+      </div>
+      <div class="contact-info">
+        <div class="ci-icon">📞</div>
+        <div>
+          <div class="ci-label">Téléphone</div>
+          <div class="ci-val">+212 7 62 92 58 47</div>
+        </div>
+      </div>
+      <div class="contact-info">
+        <div class="ci-icon">✉️</div>
+        <div>
+          <div class="ci-label">Email</div>
+          <div class="ci-val">contact@lacanadiennecar.ma</div>
+        </div>
+      </div>
+      <div class="contact-info">
+        <div class="ci-icon">🕐</div>
+        <div>
+          <div class="ci-label">Horaires</div>
+          <div class="ci-val">Lun – Sam : 8h00 – 20h00 · Dim : 9h – 17h</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="contact-form">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Prénom</label>
+          <input type="text" placeholder="Votre prénom" />
+        </div>
+        <div class="form-field">
+          <label>Nom</label>
+          <input type="text" placeholder="Votre nom" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Téléphone</label>
+        <input type="tel" placeholder="+212 7 62 92 58 47" />
+      </div>
+      <div class="form-field">
+        <label>Véhicule souhaité</label>
+        <select>
+          <option>Choisir une catégorie...</option>
+          <option>Économique</option>
+          <option>Berline</option>
+          <option>SUV</option>
+          <option>Prestige</option>
+          <option>Utilitaire</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Message</label>
+        <textarea placeholder="Décrivez votre besoin..."></textarea>
+      </div>
+      <button class="btn-primary" onclick="alert('Message envoyé ! Nous vous contacterons bientôt.')">Envoyer le message →</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo-text">La <span style="color:var(--rouge)">Canadienne</span> Car 🍁</div>
+      <p>Votre partenaire de confiance pour la location de voitures au Maroc. Qualité, fiabilité et service premium depuis 2005.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Location courte durée</a></li>
+        <li><a href="#">Location longue durée</a></li>
+        <li><a href="#">Location avec chauffeur</a></li>
+        <li><a href="#">Transferts aéroport</a></li>
+        <li><a href="#">Location entreprise</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Flotte</h4>
+      <ul>
+        <li><a href="#">Citadines</a></li>
+        <li><a href="#">Berlines</a></li>
+        <li><a href="#">SUV & 4×4</a></li>
+        <li><a href="#">Monospaces</a></li>
+        <li><a href="#">Prestige</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Agences</h4>
+      <ul>
+        <li><a href="#">Casablanca</a></li>
+        <li><a href="#">Rabat</a></li>
+        <li><a href="#">Marrakech</a></li>
+        <li><a href="#">Agadir</a></li>
+        <li><a href="#">Fès</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 La Canadienne Car. Tous droits réservés.</span>
+    <span class="maple-line">🍁 🍁 🍁</span>
+    <span><a href="#">Mentions légales</a> · <a href="#">Confidentialité</a></span>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Gallery logic
+  const galleries = document.querySelectorAll('.car-gallery');
+
+  function goSlide(gIdx, sIdx) {
+    const g = galleries[gIdx];
+    g.querySelectorAll('.gslide').forEach((s,i) => s.classList.toggle('active', i===sIdx));
+    g.querySelectorAll('.gdot').forEach((d,i) => d.classList.toggle('active', i===sIdx));
+  }
+
+  function getActive(g) {
+    const slides = g.querySelectorAll('.gslide');
+    for (let i=0;i<slides.length;i++) if (slides[i].classList.contains('active')) return i;
+    return 0;
+  }
+
+  function nextSlide(gIdx) {
+    const g = galleries[gIdx];
+    const n = g.querySelectorAll('.gslide').length;
+    goSlide(gIdx, (getActive(g)+1) % n);
+  }
+
+  function prevSlide(gIdx) {
+    const g = galleries[gIdx];
+    const n = g.querySelectorAll('.gslide').length;
+    goSlide(gIdx, (getActive(g)-1+n) % n);
+  }
+
+  // Auto-advance galleries
+  setInterval(() => {
+    galleries.forEach((_,i) => nextSlide(i));
+  }, 4000);
+</script>
+</body>
+</html>
